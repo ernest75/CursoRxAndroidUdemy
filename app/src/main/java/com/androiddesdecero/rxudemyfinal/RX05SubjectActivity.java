@@ -28,6 +28,7 @@ public class RX05SubjectActivity extends AppCompatActivity {
         Log.d("TAG1", "----------------Subject Como Observer y Observable----------------");
         Observable<String> observable = Observable.just("Alberto", "Marta");
         ReplaySubject<String> replaySubject = ReplaySubject.create();
+        replaySubject.onNext("Lord_Ernest");
         observable.subscribe(replaySubject);
         Observer<String> primerObserver = new Observer<String>() {
             @Override
@@ -73,6 +74,7 @@ public class RX05SubjectActivity extends AppCompatActivity {
             }
         };
         replaySubject.subscribe(primerObserver);
+        replaySubject.onNext("Lord_Ernest");
         replaySubject.subscribe(segundoObserver);
     }
 

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/CursoRxAndroidUdemy.iml" filepath="$PROJECT_DIR$/CursoRxAndroidUdemy.iml" group="CursoRxAndroidUdemy" />
+      <module fileurl="file://$PROJECT_DIR$/app/CursoRxAndroidUdemy-app.iml" filepath="$PROJECT_DIR$/app/CursoRxAndroidUdemy-app.iml" group="CursoRxAndroidUdemy/app" />
       <module fileurl="file://$PROJECT_DIR$/RXUdemyFinal.iml" filepath="$PROJECT_DIR$/RXUdemyFinal.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

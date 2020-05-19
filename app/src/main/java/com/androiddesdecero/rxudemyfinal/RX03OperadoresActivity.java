@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +48,7 @@ public class RX03OperadoresActivity extends AppCompatActivity {
         Operadores que Crean Observables
          */
 
-        //probarJust();
+       // probarJust();
         //probarJustArray();
         //probarFromArray();
         //probarRange();
@@ -56,7 +57,7 @@ public class RX03OperadoresActivity extends AppCompatActivity {
         //probarCreate();
         //probarCreateException();
         ///probarCreateLargaDuracion();
-        //probarCreateLargaDuracionLambda();
+      //  probarCreateLargaDuracionLambda();
 
         /*
         Operadores que Transforman Observables
@@ -98,7 +99,7 @@ public class RX03OperadoresActivity extends AppCompatActivity {
         /*
         Operadores que ayudan a recuperar errores de notificación en los observables
          */
-        //probarRetryWhen();
+       // probarRetryWhen();
 
         /*
         Operadores Útiles de RX
@@ -131,8 +132,56 @@ public class RX03OperadoresActivity extends AppCompatActivity {
 
         //probarAverage();
         //probarCount();
+        //probarMaxErn();
+       // probarMinErn();
+       // probarSumErn();
         //probarMaxMinSum();
-        probarReduce();
+        //probarReduce();
+        probarReduceErn();
+    }
+
+    private void probarReduceErn() {
+        Observable<Integer> integerObservable = Observable.just(1, 1, 1, 1);
+        integerObservable.reduce(new BiFunction<Integer, Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer, Integer integer2) throws Exception {
+                return integer + integer2;
+            }
+        })
+                .subscribe(
+                        e -> Log.d("TAG1", "reduce : " + e)
+                );
+
+    }
+
+    private void probarSumErn() {
+        Observable<Integer> integerObservable = Observable.just(1,1);
+        MathObservable.sumInt(integerObservable)
+                .subscribe(
+                        e->Log.d("TAG1", "suma : " + e)
+                );
+    }
+
+    private void probarMinErn() {
+        Observable<Integer> integerObservable = Observable.just(23,33,5643,232,1,2121);
+        MathObservable.min(integerObservable)
+                .subscribe(
+                        e->Log.d("TAG1", "minim : " + e)
+                );
+    }
+
+    private void probarMaxErn() {
+        Observable<Integer> obsInt = Observable.create(emitter -> {
+            int i = 3;
+            emitter.onNext(i++);
+            emitter.onNext(i+5);
+            emitter.onComplete();
+        });
+        MathObservable
+                .max(obsInt)
+                .subscribe(
+                        e -> Log.e("TAG1", "Item : " + e)
+                );
     }
 
     private void probarReduce(){
@@ -522,10 +571,10 @@ public class RX03OperadoresActivity extends AppCompatActivity {
 
     private void probarDo() {
         Log.d("TAG1", "----------------Do----------------");
-        Observable<String> numeroObservable = Observable.just("1", "4", "89", "45", "0");
+        Observable<Integer> numeroObservable = Observable.just(1, 4, 89, 45, 0);
         numeroObservable
-                .doOnNext(e->Log.d("TAG1", "doOnNext:" + e))
-                .doAfterNext(e->Log.d("TAG1", "doAfterNext: " + e))
+                .doOnNext(e->Log.d("TAG1", "doOnNext:" + (e + 2)))
+                .doAfterNext(e->Log.d("TAG1", "doAfterNext: " + (e-2)))
                 .doOnComplete(()->Log.d("TAG1", "doOnComplete "))
                 .subscribe(
                         e->Log.d("TAG1", "onNext: " + e)
@@ -1287,33 +1336,60 @@ public class RX03OperadoresActivity extends AppCompatActivity {
 
     private void probarJustArray(){
         Log.d("TAG1", "----------------JustArray----------------");
-        String[] numeros = {"1","2","3","4","5","6","7","8","9","10"};
+        //String[] numeros = {"1","2","3","4","5","6","7","8","9","10"};
+        ArrayList<String> numeros = new ArrayList<>(Arrays.asList("1","2","3","4","5","6","7","8","9","10"));
+//        Observable.just(numeros)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        new Observer<String[]>() {
+//                            @Override
+//                            public void onSubscribe(Disposable d) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onNext(String[] strings) {
+//                                Log.d("TAG1", "JustArray->onNext " + strings.length);
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onComplete() {
+//
+//                            }
+//                        }
+//                );
         Observable.just(numeros)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Observer<String[]>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+                .subscribe(new Observer<ArrayList<String>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d("TAG1", "JustArray->onSubscibe ");
+                    }
 
-                            }
-
-                            @Override
-                            public void onNext(String[] strings) {
-                                Log.d("TAG1", "JustArray->onNext " + strings.length);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
+                    @Override
+                    public void onNext(ArrayList<String> strings) {
+                        for (int i = 0; i< strings.size() ; i++ ){
+                            Log.d("TAG1", "JustArray->onNext " + strings.get(i));
                         }
-                );
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private void probarJust(){
